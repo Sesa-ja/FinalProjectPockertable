@@ -5,11 +5,10 @@ function Card({ rank, suit, hidden }) {
     return <div className="card hidden">🂠</div>;
   }
   return (
-    <div className="card">
+    <div className={`card ${(suit === '♥' || suit === '♦') && 'red'}`}>
       <span className="rank">{rank}</span>
       <span className="suit">{suit}</span>
-    </div>
-  );
+    </div>  );
 }
 
 export default Card;

@@ -4,7 +4,6 @@ export class CardDeck {
   constructor() {
     this.updateNewDeck();
   }
-
   updateNewDeck() {
     let cards = [];
     const suits = ['♠', '♥', '♦', '♣'];
@@ -21,6 +20,7 @@ export class CardDeck {
     const cards = [];
     for (let i = 0; i < count; i++) {
       const card = this.deck.splice(random(this.deck.length), 1)[0];
+      console.log(card);
       cards.push(card);
     }
     return cards;
