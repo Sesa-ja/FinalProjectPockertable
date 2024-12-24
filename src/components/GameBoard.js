@@ -3,6 +3,7 @@ import Card from './Card';
 import { CardDeck } from '../classes/CardDeck';
 import { PokerHandManager } from '../classes/PokerHandManager';
 import Sidebar from './Sidebar';
+import ProbabilityTable from './ProbabilityTable';
 
 
 const revealSeq = [0, 3, 4, 5]
@@ -12,7 +13,7 @@ const GameBoard = () => {
     const [playerCards, setPlayerCards] = useState([]);
     const [communityCards, setCommunityCards] = useState(new Array(5).fill(null));
     const [revealCount, setRevealCount] = useState(0);
-    // const pokerHandManager = new PokerHandManager();
+    const pokerHandManager = new PokerHandManager();
 
     useEffect(() => {
         setPlayerCards(deck.current.getCards(2))
@@ -61,6 +62,7 @@ const GameBoard = () => {
                     ))}
                 </div>
             </div>
+            <ProbabilityTable cards={[...playerCards, ...communityCards]} />
         </>
     );
 };

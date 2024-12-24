@@ -92,14 +92,3 @@ export class PokerHandManager {
     };
   }
 }
-// Debugging PokerHandManager
-const manager = new PokerHandManager();
-const testCards = [
-  { rank: '10', suit: '♠' },
-  { rank: 'J', suit: '♠' },
-  { rank: 'Q', suit: '♠' },
-  { rank: 'K', suit: '♠' },
-  { rank: 'A', suit: '♠' }
-];
-console.log('Test Royal Flush:', manager.setCards(testCards));
-
