@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { combination } from "../utils/MathFunctions"
+import { c } from "../utils/MathFunctions"
 const getReps = (cards) => {
     const ranks = cards.map(card => card.rank);
     const result = [];
@@ -15,59 +15,48 @@ const getReps = (cards) => {
     return result.sort((a, b) => b.indexes.length - a.indexes.length);
 }
 
-const checkPairs = (cards) => {
+const checkOnePair = (cards) => {
     const reps = getReps(cards)
     return !!(reps.find(rep => rep.indexes.length >= 2))
 }
+const checkTwoPair = (cards) => {
+    const reps = getReps(cards)
+    const pairs = reps.filter(rep => rep.indexes.length >= 2)
+    return pairs.length >= 2
+}
 
-const totalCards = 52
+
 const onePairProb = (knownCards) => {
-    if (checkPairs(knownCards))
+    if (checkOnePair(knownCards))
         return 1;
     if (knownCards.length == 7)
         return 0
-    // Step 1: Determine unknown cards
-    const unknownCards = totalCards - knownCards.length;
-    const remainingCardsPerRank = 4; // 4 cards of each rank in the deck
-    let pairs = 0;
-
-    // Step 2: Count occurrences of each rank in known cards
-    const rankCounts = {};
-    knownCards.forEach(card => {
-        const rank = card.rank;
-        rankCounts[rank] = (rankCounts[rank] || 0) + 1;
-    });
-
-    // Step 3: Calculate pair probabilities based on known ranks
-    let pairProbability = 0;
-    Object.keys(rankCounts).forEach(rank => {
-        const count = rankCounts[rank];
-        const remainingOfThisRank = remainingCardsPerRank - count;
-
-        if (count === 1) {
-            // Probability of hitting a pair with 1 known card
-            pairProbability += (remainingOfThisRank / unknownCards);
-        } else if (count > 1) {
-            // Pair already exists
-            pairs++;
-        }
-    });
-
+    const total = c(52 - knownCards.length, 7 - knownCards.length)
+    const pairProbability = 1 - c(13 - knownCards.length, 7 - knownCards.length) * (c(4, 1) ** (7 - knownCards.length)) / total
     // Step 4: Adjust probability for multiple pairs
     return pairProbability;
+}
+
+const twoPairProb = (knownCards) => {
+    if (checkTwoPair(knownCards))
+        return 1
+    if (knownCards.length == 7)
+        return 0
+
+    const total = c(52 - knownCards.length, 7 - knownCards.length)
+    const case1 = c(13 - knownCards.length, 2) * c(4, 2, 2) * c(13 - knownCards.length - 2, 1) * c(4, 1)
+    // const case2 = c(12, 1) * c(3, 1) * c(11, 1) * c(4, 2) * c(10, 2) * c(4, 1, 2)
+    // const case3 = c(13, 2) * c(3, 1, 2) * c(11, 3) * c(4, 1, 3)
+    return (case1) / total
 }
 
 
 const ProbabilityTable = ({ cards }) => {
     const sortedCards = cards.filter(card => !!card)
-    console.log(sortedCards);
     return <table>
         <tr>
             <th>
                 One pair
-            </th>
-            <th>
-                Two pair
             </th>
         </tr>
         <tr>
